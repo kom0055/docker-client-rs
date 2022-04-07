@@ -1,0 +1,27 @@
+[package]
+name = "docker-client-rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+[dependencies.futures]
+version = "0.3"
+[dependencies.futures-core]
+version = "0.3"
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+[dependencies.serde_json]
+version = "1.0"
+[dependencies.tokio]
+version = "1"
+features = ["full"]
+[dependencies.hyper]
+version = "0.14"
+features = ["full"]
+[dependencies.hyperlocal]
+version = "0.8"
+[dev-dependencies.doc-comment]
+version = "0.3"
