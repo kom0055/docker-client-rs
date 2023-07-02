@@ -1,17 +1,23 @@
 extern crate tokio;
-
+extern crate serde_qs as qs;
+extern crate serde_urlencoded as urlencoded;
 
 use std::fmt::{Debug};
 use crate::engine::containers::apis::{ContainerApi};
 use serde::{Deserialize};
 use hyper::{Client, Request};
 use hyperlocal::{UnixClientExt, UnixConnector, Uri};
-use crate::engine::containers::types::{Container};
+use crate::engine::containers::types;
 use futures::stream::Concat;
 use futures::{TryFutureExt};
 use futures::executor::block_on;
 use hyper::body::Buf;
+use serde::de::Unexpected::Option;
 pub use crate::common::errors;
+use url::Url;
+use crate::common::types::OptionBool;
+use structmap::{ToMap, value::Value, StringMap, GenericMap};
+use qs::Config;
 
 
 #[derive(Debug)]
@@ -63,20 +69,16 @@ pub struct DockerFuture {
 
 
 impl ContainerApi for EngineClient {
-    fn list_containers(&self) -> Result<Vec<Container>, errors::DockerError> {
+    fn list_containers(&self, req: types::ListContainerRequest) -> Result<Vec<types::Container>, errors::DockerError> {
         let path = "/containers/json";
+        //let iters = [];
 
+
+       // let u1 = Url::parse_with_params("", &iters);
         let url: hyper::Uri = Uri::new(self.socket.as_str(), path).into();
         let request = Request::get(url)
             .header("Content-Type", "application/json").body(hyper::Body::empty()).unwrap();
         let res = self.request(request);
         return res;
     }
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn test_list_containers() {
-    let client = EngineClient::new("/var/run/docker.sock");
-    let a = client.list_containers();
-    println!("rect1 is {:#?}", a);
 }
